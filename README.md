@@ -8,15 +8,21 @@ https://forums.alliedmods.net/showthread.php?p=2714045
 ![image](https://i.imgur.com/wEpAsjT.jpeg)
 
 # Admin Commands (ROOT FLAG)
-- sm_honor_reset --> Reset all stats from database
-- sm_honor_player_reset <STEAM_1:0:0000000> --> Deletes a player from database based in STEAMID
+- `sm_honor_reset`
+  - Reset all stats from database
+- `sm_honor_player_reset` <STEAM_1:0:0000000>
+  - Deletes a player from database based in STEAMID
 
 
 # CVars
-- sm_honor_enabled --> Enable or disable NMRiH Honor Ranking
-- sm_honor_debug --> Will spam messages in console and log about any SQL action
-- sm_honor_timeshared --> Minimum time shared required between players (in seconds) to pop up honor voting menu
-- sm_honor_multiple_votes --> Set to 1 if you want players to use all their votes in one single user
+- sm_honor_enabled
+  - Enable or disable NMRiH Honor Ranking
+- sm_honor_debug
+  - Will spam messages in console and log about any SQL action
+- sm_honor_timeshared
+  - Minimum time shared required between players (in seconds) to pop up honor voting menu
+- sm_honor_multiple_votes
+  - Set to 1 if you want players to use all their votes in one single user
 
 # Install
 - Simply copy and merge /addons folder with the one in your game directory
