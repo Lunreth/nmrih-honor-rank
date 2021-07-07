@@ -28,7 +28,7 @@ https://forums.alliedmods.net/showthread.php?p=2714045
 - Simply copy and merge /addons folder with the one in your game directory
 - Edit configs/databases.cfg --> Insert a new keyvalue set like the following example:
 
-"nmrih_honor"
+`"nmrih_honor"
 {
    "driver" "sqlite"
    "database" "nmrih_honor"
