@@ -1,5 +1,5 @@
 # NMRiH - Honor Ranking
-Players will be able to give honor votes to friendly, cooperative and veteran users, it also has support for SQLite database and a full menu to display ranking in-game.
+Players will be able to give honor votes to friendly, cooperative and veteran users, it also has support for SQLite database and a full menu to display ranking in-game. Use `!honor` command to check your own votes.
 
 https://forums.alliedmods.net/showthread.php?p=2714045
 
