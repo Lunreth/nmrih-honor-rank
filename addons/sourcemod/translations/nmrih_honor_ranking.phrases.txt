@@ -1,0 +1,169 @@
+"Phrases"
+{
+  // MAIN HONOR MENU
+  "my_honor_stats"
+  {
+    "en"  "My Honor Stats"
+    "es"  "Mis galardones"
+  }
+  "online_players"
+  {
+    "en"  "Online Players"
+    "es"  "Jugadores online"
+  }
+  "top_friendly"
+  {
+    "en"  "Top Friendly Players"
+    "es"  "Jugadores amigables"
+  }
+  "top_coop"
+  {
+    "en"  "Top Cooperative Players"
+    "es"  "Jugadores cooperativos"
+  }
+  "top_leader"
+  {
+    "en"  "Top Leaders & Veterans"
+    "es"  "Mejores líderes"
+  }
+  // MY STATS MENU
+  "my_stats"
+  {
+    "en"  "My Stats"
+    "es"  "Mis galardones"
+  }
+  "my_name"
+  {
+    "#format" "{1:s}"
+    "en"  "Name = {1}"
+    "es"  "Nombre = {1}"
+  }
+  "my_friendly_votes"
+  {
+    "#format" "{1:d}"
+    "en"  "Friendly: {1} votes"
+    "es"  "Amigable: {1} votos"
+  }
+  "my_coop_votes"
+  {
+    "#format" "{1:d}"
+    "en"  "Cooperative: {1} votes"
+    "es"  "Cooperativo: {1} votos"
+  }
+  "my_leader_votes"
+  {
+    "#format" "{1:d}"
+    "en"  "Leader: {1} votes"
+    "es"  "Lider: {1} votos"
+  }
+  // TOP STATS MENU
+  "player_name"
+  {
+    "en"  "Player Name"
+    "es"  "Nombre"
+  }
+  "friendly_votes"
+  {
+    "en"  "Friendly Votes"
+    "es"  "Amigable (Votos)"
+  }
+  "coop_votes"
+  {
+    "en"  "Coop Votes"
+    "es"  "Cooperativo (Votos)"
+  }
+  "leader_votes"
+  {
+    "en"  "Leader Votes"
+    "es"  "Líder (Votos)"
+  }
+  // VOTING MENU
+  "pick_friendly_player"
+  {
+    "en"  "Pick the most friendly player in this round"
+    "es"  "Elige al jugador más amigable y divertido de esta ronda"
+  }
+  "pick_coop_player"
+  {
+    "en"  "Pick the most cooperative player in this round"
+    "es"  "Elige al jugador más útil y cooperativo de esta ronda"
+  }
+  "pick_leader_player"
+  {
+    "en"  "Pick the most valuable leader in this round"
+    "es"  "Elige al líder o veterano más importante de esta ronda"
+  }
+  "skip_vote"
+  {
+    "en"  "Skip vote"
+    "es"  "No votar"
+  }
+  // AFTER VOTING
+  "friendly_vote_discarded"
+  {
+    "en"  "Friendly vote discarded."
+    "es"  "No elegiste un jugador amigable."
+  }
+  "coop_vote_discarded"
+  {
+    "en"  "Cooperative vote discarded."
+    "es"  "No elegiste un jugador cooperativo."
+  }
+  "leader_vote_discarded"
+  {
+    "en"  "Leader vote discarded."
+    "es"  "No elegiste un lider de ronda."
+  }
+  "friendly_player_picked"
+  {
+    "#format" "{1:s}"
+    "en"  "You picked {1} as friendly player in this round."
+    "es"  "Elegiste a {1} como el jugador más amigable de esta ronda."
+  }
+  "coop_player_picked"
+  {
+    "#format" "{1:s}"
+    "en"  "You picked {1} as cooperative player in this round."
+    "es"  "Elegiste a {1} como el jugador más útil y cooperativo."
+  }
+  "leader_player_picked"
+  {
+    "#format" "{1:s}"
+    "en"  "You picked {1} as your favorite leader in this round."
+    "es"  "Elegiste a {1} como tu lider favorito en esta ronda."
+  }
+  "someone_picked_friendly"
+  {
+    "en"  "Someone voted for you as friendly player \n Type !honor to see your stats."
+    "es"  "Alguien te eligió como jugador amigable \n Escribe !honor para ver tus galardones."
+  }
+  "someone_picked_coop"
+  {
+    "en"  "Someone voted for you as cooperative player \n Type !honor to see your stats."
+    "es"  "Alguien te eligió como jugador cooperativo \n Escribe !honor para ver tus galardones."
+  }
+  "someone_picked_leader"
+  {
+    "en"  "Someone picked you as their favorite leader \n Type !honor to see your stats."
+    "es"  "Alguien te eligió como su lider favorito \n Escribe !honor para ver tus galardones."
+  }
+  // FINAL TEXT
+  "most_friendly_player"
+  {
+    "#format" "{1:s},{2:d}"
+    "en"  "Most friendly player in this round: {1} (+{2} votes)"
+    "es"  "Jugador más amigable de esta ronda: {1} (+{2} votos)"
+  }
+  "most_cooperative_player"
+  {
+    "#format" "{1:s},{2:d}"
+    "en"  "Most cooperative player in this round: {1} (+{2} votes)"
+    "es"  "Jugador más útil y cooperativo de esta ronda: {1} (+{2} votos)"
+  }
+  "best_leader"
+  {
+    "#format" "{1:s},{2:d}"
+    "en"  "Favorite survivor leader in this round: {1} (+{2} votes)"
+    "es"  "Sobreviviente lider favorito en esta ronda: {1} (+{2} votos)"
+  }
+}
