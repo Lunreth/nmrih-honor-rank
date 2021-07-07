@@ -30,6 +30,6 @@ https://forums.alliedmods.net/showthread.php?p=2714045
 
 "nmrih_honor"
 {
-  "driver" "sqlite"
-  "database" "nmrih_honor"
+   "driver" "sqlite"
+   "database" "nmrih_honor"
 }
