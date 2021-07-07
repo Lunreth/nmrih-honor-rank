@@ -15,18 +15,18 @@ https://forums.alliedmods.net/showthread.php?p=2714045
 
 
 # CVars
-- sm_honor_enabled (1/0) (Default: 1)
+- `sm_honor_enabled` (1/0) (Default: 1)
   - Enable or disable NMRiH Honor Ranking
-- sm_honor_debug (1/0) (Default: 0)
+- `sm_honor_debug` (1/0) (Default: 0)
   - Will spam messages in console and log about any SQL action
-- sm_honor_timeshared (1-60000) (Default: 600)
+- `sm_honor_timeshared` (Default: 600)
   - Minimum time shared required between players (in seconds) to pop up honor voting menu
-- sm_honor_multiple_votes (1/0) (Default: 1)
+- `sm_honor_multiple_votes` (1/0) (Default: 1)
   - Set to 1 if you want players to use all their votes in one single user
 
 # Install
 - Simply copy and merge /addons folder with the one in your game directory
-- Edit configs/databases.cfg --> Insert a new keyvalue set like the following example:
+- Edit `configs/databases.cfg` --> Insert a new keyvalue set like the following example:
 
 `"nmrih_honor"
 {
