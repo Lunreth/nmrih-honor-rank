@@ -32,4 +32,4 @@ https://forums.alliedmods.net/showthread.php?p=2714045
 {
    "driver" "sqlite"
    "database" "nmrih_honor"
-}
+}`
