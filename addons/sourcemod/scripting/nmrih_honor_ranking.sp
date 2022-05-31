@@ -11,6 +11,15 @@
 #define PLUGIN_VERSION "1.0.2" // 31-05-2022
 #define PLUGIN_NAME "[NMRiH] Honor Ranking"
 
+// CHANGELOG
+/*
+[1.0.2]
+- Added float cvar sm_honor_min_players (default 4.0)
+
+[1.0.0]
+- First release
+*/
+
 // CVARS
 ConVar cvar_PluginEnabled;
 ConVar cvar_DebugEnabled;
