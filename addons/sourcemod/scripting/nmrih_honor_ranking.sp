@@ -8,7 +8,7 @@
 #pragma newdecls required
 
 #define PLUGIN_AUTHOR "Ulreth*"
-#define PLUGIN_VERSION "1.0.0" // 1-07-2020
+#define PLUGIN_VERSION "1.0.2" // 31-05-2022
 #define PLUGIN_NAME "[NMRiH] Honor Ranking"
 
 // CVARS
@@ -16,6 +16,7 @@ ConVar cvar_PluginEnabled;
 ConVar cvar_DebugEnabled;
 ConVar cvar_TimeShared;
 ConVar cvar_MultipleVotes;
+ConVar cvar_MinPlayers;
 // GLOBAL DATABASE VARIABLES
 Database g_Database = null;
 // PLAYERS DATA
@@ -31,6 +32,7 @@ int g_MapLeaderCount[10];
 int g_TimeShared[10][10];
 int g_VotesDone[10];
 // DISPLAY MESSAGES
+bool g_RoundEnd = false;
 char g_MenuFriendlyMessages[100][64];
 char g_MenuCoopMessages[100][64];
 char g_MenuLeaderMessages[100][64];
@@ -57,14 +59,16 @@ public void OnPluginStart()
 	cvar_PluginEnabled = AutoExecConfig_CreateConVar("sm_honor_enabled", "1.0", "Enable or disable NMRiH Honor Ranking plugin", FCVAR_NONE, true, 0.0, true, 1.0);
 	cvar_DebugEnabled = AutoExecConfig_CreateConVar("sm_honor_debug", "0.0", "Will spam messages in console and log about any SQL action", FCVAR_NONE, true, 0.0, true, 1.0);
 	cvar_TimeShared = AutoExecConfig_CreateConVar("sm_honor_timeshared", "600.0", "Minimum time shared required between players (in seconds) to pop up honor voting menu.", FCVAR_NONE, true, 60.0, true, 3600.0);
-	cvar_MultipleVotes = AutoExecConfig_CreateConVar("sm_honor_multiple_votes", "1.0", "Set to 1 if you want players to use all their votes in one single user.", FCVAR_NONE, true, 0.0, true, 1.0);
+	cvar_MultipleVotes = AutoExecConfig_CreateConVar("sm_honor_multiple_votes", "0.0", "Set to 1 if you want players to use all their votes in one single user.", FCVAR_NONE, true, 0.0, true, 1.0);
+	cvar_MinPlayers = AutoExecConfig_CreateConVar("sm_honor_min_players", "4.0", "Min amount of players required to show honor voting menu.", FCVAR_NONE, true, 2.0, true, 128.0);
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
 	
 	if (GetConVarFloat(cvar_PluginEnabled) != 1.0) return;
 	HookEvent("player_leave", Event_PlayerLeave);
 	HookEvent("new_wave", Event_NewWave);
-	HookEvent("objective_complete", Event_ObjectiveComplete);
+	HookEvent("objective_complete", Event_NewWave);
+	HookEvent("nmrih_reset_map", Event_ResetMap);
 	HookEvent("extraction_begin", Event_ExtractionBegin);
 	HookEvent("player_extracted", Event_PlayerExtracted);
 	RegConsoleCmd("sm_honor", Menu_Main);
@@ -574,6 +578,22 @@ public Action Event_PlayerLeave(Event event, const char[] name, bool dontBroadca
 
 public void Event_NewWave(Event event, const char[] name, bool dontBroadcast)
 {
+	if (g_RoundEnd == true) return;
+	
+	float players_count = 0;
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		for (int j = 1; j <= MaxClients; j++)
+		{
+			if (((g_TimeShared[i][j] > GetConVarFloat(cvar_TimeShared)) && (i != j)) && (g_VotesDone[i] < 3))
+			{
+				players_count = (players_count + 1.0);
+			}
+		}
+	}
+	players_count = (players_count/2.0);
+	if (players_count < GetConVarFloat(cvar_MinPlayers)) return;
+	
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		for (int j = 1; j <= MaxClients; j++)
@@ -587,25 +607,31 @@ public void Event_NewWave(Event event, const char[] name, bool dontBroadcast)
 	}
 }
 
-public void Event_ObjectiveComplete(Event event, const char[] name, bool dontBroadcast)
+public Action Event_ResetMap(Event event, const char[] name, bool dontBroadcast)
 {
-	for (int i = 1; i <= MaxClients; i++)
-	{
-		for (int j = 1; j <= MaxClients; j++)
-		{
-			if (((g_TimeShared[i][j] > GetConVarFloat(cvar_TimeShared)) && (i != j)) && (g_VotesDone[i] < 3))
-			{
-				Menu_Main_Vote(i,0);
-				break;
-			}
-		}
-	}
+	g_RoundEnd = false;
+	return Plugin_Continue;
 }
 
 public void Event_PlayerExtracted(Event event, const char[] name, bool dontBroadcast)
 {
 	int client = GetEventInt(event, "player_id");
 	if (client < 1) return;
+	if (g_RoundEnd == true) return;
+	//
+	float players_count = 0;
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		for (int j = 1; j <= MaxClients; j++)
+		{
+			if (((g_TimeShared[i][j] > GetConVarFloat(cvar_TimeShared)) && (i != j)) && (g_VotesDone[i] < 3))
+			{
+				players_count = (players_count + 1.0);
+			}
+		}
+	}
+	players_count = (players_count/2.0);
+	if (players_count < GetConVarFloat(cvar_MinPlayers)) return;
 	// People that shared time with this leaving player no longer counts
 	for (int i = 1; i <= MaxClients; i++)
 	{
@@ -794,6 +820,7 @@ public int Callback_Menu_Main_Vote(Menu hMenu, MenuAction action, int param1, in
 
 public void Event_ExtractionBegin(Event event, const char[] name, bool dontBroadcast)
 {
+	g_RoundEnd = true;
 	int max_friendly_count = 0;
 	int max_coop_count = 0;
 	int max_leader_count = 0;
