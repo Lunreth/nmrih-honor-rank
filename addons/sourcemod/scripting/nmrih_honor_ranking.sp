@@ -8,11 +8,14 @@
 #pragma newdecls required
 
 #define PLUGIN_AUTHOR "Ulreth*"
-#define PLUGIN_VERSION "1.0.2" // 31-05-2022
+#define PLUGIN_VERSION "1.0.3" // 22-07-2022
 #define PLUGIN_NAME "[NMRiH] Honor Ranking"
 
 // CHANGELOG
 /*
+[1.0.3]
+- Fixed wrong vote count after very fast games
+
 [1.0.2]
 - Added float cvar sm_honor_min_players (default 4.0)
 
@@ -95,6 +98,25 @@ public void OnPluginStart()
 	//
 	Database.Connect(T_Connect, "nmrih_honor");
 	CreateTimer(1.0, Timer_Global, _,TIMER_REPEAT);
+}
+
+public void OnMapStart()
+{
+	// VARIABLES TO ZERO
+	g_RoundEnd = false;
+	g_FriendlyRecords = 0;
+	g_CoopRecords = 0;
+	g_LeaderRecords = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		g_SteamID[i] = "\0";
+		g_PlayerName[i] = "\0";
+		g_MapFriendlyCount[i] = 0;
+		g_MapCoopCount[i] = 0;
+		g_MapLeaderCount[i] = 0;
+		g_VotesDone[i] = 0;
+		for (int j = 0; j < 10; j++) g_TimeShared[i][j] = 0;
+	}
 }
 
 public void T_Connect(Database db, const char[] error, any data)
@@ -182,6 +204,9 @@ public void T_LoadPlayer(Database db, DBResultSet results, const char[] error, a
 	else
     {
 		// Inserting new data
+		g_FriendlyCount[client] = 0;
+		g_CoopCount[client] = 0;
+		g_LeaderCount[client] = 0;
 		if (GetConVarFloat(cvar_DebugEnabled) == 1.0)	LogMessage("[Honor Ranking] %s has no records in DB, creating new row.", g_PlayerName[client]);
 		if (GetConVarFloat(cvar_DebugEnabled) == 1.0)	PrintToServer("[Honor Ranking] %s has no records in DB, creating new row.", g_PlayerName[client]);
 		Format(query, sizeof(query), "INSERT INTO 'players_honor' (steam_id, player_name, friendly_count, coop_count, leader_count) VALUES ('%s', '%s', 0, 0, 0);", escape_steam_id, escape_player_name);
@@ -589,7 +614,7 @@ public void Event_NewWave(Event event, const char[] name, bool dontBroadcast)
 {
 	if (g_RoundEnd == true) return;
 	
-	float players_count = 0;
+	float players_count = 0.0;
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		for (int j = 1; j <= MaxClients; j++)
@@ -628,7 +653,7 @@ public void Event_PlayerExtracted(Event event, const char[] name, bool dontBroad
 	if (client < 1) return;
 	if (g_RoundEnd == true) return;
 	//
-	float players_count = 0;
+	float players_count = 0.0;
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		for (int j = 1; j <= MaxClients; j++)
@@ -694,6 +719,7 @@ public Action Menu_Main_Vote(int client, int args)
 	}
 	hMenu.AddItem("space", "",ITEMDRAW_SPACER);
 	hMenu.Display(client, MENU_TIME_FOREVER);
+	return Plugin_Continue;
 }
 
 public int Callback_Menu_Main_Vote(Menu hMenu, MenuAction action, int param1, int param2)
