@@ -8,11 +8,15 @@
 #pragma newdecls required
 
 #define PLUGIN_AUTHOR "Ulreth*"
-#define PLUGIN_VERSION "1.0.3" // 22-07-2022
+#define PLUGIN_VERSION "1.0.4" // 03-08-2022
 #define PLUGIN_NAME "[NMRiH] Honor Ranking"
 
 // CHANGELOG
 /*
+[1.0.4]
+- Removed spectator players from honor menu
+- Fixed timer wrong method
+
 [1.0.3]
 - Fixed wrong vote count after very fast games
 
@@ -53,6 +57,9 @@ int g_FriendlyRecords = 0;
 int g_CoopRecords = 0;
 int g_LeaderRecords = 0;
 
+// GLOBAL TIMER
+Handle g_hTimer_Rep = null;
+
 public Plugin myinfo =
 {
 	name = PLUGIN_NAME,
@@ -76,7 +83,6 @@ public void OnPluginStart()
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
 	
-	if (GetConVarFloat(cvar_PluginEnabled) != 1.0) return;
 	HookEvent("player_leave", Event_PlayerLeave);
 	HookEvent("new_wave", Event_NewWave);
 	HookEvent("objective_complete", Event_NewWave);
@@ -96,12 +102,18 @@ public void OnPluginStart()
 	RegAdminCmd("sm_honor_reset", Command_ResetTable, ADMFLAG_ROOT);
 	RegAdminCmd("sm_honor_player_reset", Command_DeletePlayer, ADMFLAG_ROOT);
 	//
-	Database.Connect(T_Connect, "nmrih_honor");
-	CreateTimer(1.0, Timer_Global, _,TIMER_REPEAT);
+	//Database.Connect(T_Connect, "nmrih_honor");
+	//CreateTimer(1.0, Timer_Global, _,TIMER_REPEAT);
 }
 
 public void OnMapStart()
 {
+	// CLEAN TIMER
+	if (g_hTimer_Rep != null)
+	{
+		KillTimer(g_hTimer_Rep);
+		g_hTimer_Rep = null;
+	}
 	// VARIABLES TO ZERO
 	g_RoundEnd = false;
 	g_FriendlyRecords = 0;
@@ -117,6 +129,11 @@ public void OnMapStart()
 		g_VotesDone[i] = 0;
 		for (int j = 0; j < 10; j++) g_TimeShared[i][j] = 0;
 	}
+	
+	if (GetConVarFloat(cvar_PluginEnabled) != 1.0) return;
+	
+	Database.Connect(T_Connect, "nmrih_honor");
+	g_hTimer_Rep = CreateTimer(1.0, Timer_Global, _, TIMER_REPEAT);
 }
 
 public void T_Connect(Database db, const char[] error, any data)
@@ -998,17 +1015,24 @@ public void T_RefreshPlayers(Database db, DBResultSet results, const char[] erro
 
 public Action Timer_Global(Handle timer)
 {
+	if ((g_hTimer_Rep != timer) || (timer == null)) return Plugin_Stop;
 	for (int i = 1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i))
 		{
-			// Player was active this second
-			for (int j = 1; j <= MaxClients; j++)
+			if (GetClientTeam(i) != 1)
 			{
-				if ((IsClientInGame(j)) && (j != i))
+				// Player was active this second
+				for (int j = 1; j <= MaxClients; j++)
 				{
-					// Players shared a second of game time
-					g_TimeShared[i][j]++;
+					if ((IsClientInGame(j)) && (j != i))
+					{
+						if (GetClientTeam(j) != 1)
+						{
+							// Players shared a second of game time
+							g_TimeShared[i][j]++;
+						}
+					}
 				}
 			}
 		}
